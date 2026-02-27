@@ -36,9 +36,11 @@ def graph_env_with_states(monkeypatch, graph_env):
 class TestGraphRegistry:
     def test_infra_graphs_loaded(self, graph_env):
         reg = GraphRegistry()
-        assert "https://ontology.example.com/" in reg.infra_graphs
-        assert "https://schulart.example.com/" in reg.infra_graphs
-        assert "https://schulfach.example.com/" in reg.infra_graphs
+        assert set(reg.infra_graphs) == {
+            "https://ontology.example.com/",
+            "https://schulart.example.com/",
+            "https://schulfach.example.com/",
+        }
 
     def test_no_state_graphs_by_default(self, graph_env):
         reg = GraphRegistry()
@@ -46,21 +48,20 @@ class TestGraphRegistry:
 
     def test_state_graphs_loaded(self, graph_env_with_states):
         reg = GraphRegistry()
-        assert "SN" in reg.state_graphs
-        assert reg.state_graphs["SN"] == "https://sn.example.com/"
+        assert reg.state_graphs.get("SN") == "https://sn.example.com/"
         assert "BY" in reg.state_graphs
 
     def test_all_graphs_includes_infra_and_state(self, graph_env_with_states):
         reg = GraphRegistry()
-        all_g = reg.all_graphs
-        assert "https://ontology.example.com/" in all_g
-        assert "https://sn.example.com/" in all_g
+        all_g = set(reg.all_graphs)
+        required = {"https://ontology.example.com/", "https://sn.example.com/"}
+        assert all_g.issuperset(required)
 
     def test_graphs_for_bundesland_with_state(self, graph_env_with_states):
         reg = GraphRegistry()
-        bl_graphs = reg.graphs_for_bundesland("SN")
-        assert "https://sn.example.com/" in bl_graphs
-        assert "https://ontology.example.com/" in bl_graphs
+        bl_graphs = set(reg.graphs_for_bundesland("SN"))
+        required = {"https://sn.example.com/", "https://ontology.example.com/"}
+        assert bl_graphs.issuperset(required)
 
     def test_graphs_for_bundesland_without_state(self, graph_env):
         reg = GraphRegistry()
