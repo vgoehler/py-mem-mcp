@@ -1,0 +1,12 @@
+services:
+  py-mem-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: py-mem-mcp:latest
+    container_name: py-mem-mcp
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
