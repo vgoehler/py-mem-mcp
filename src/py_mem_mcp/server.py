@@ -45,7 +45,7 @@ def create_server() -> FastMCP:
 
 def main() -> None:
     """Entry point for the MEM ontology MCP server."""
-    port_str = os.environ.get("PORT", "8000")
+    port_str = os.environ.get("PORT", "3000")
     try:
         port = int(port_str)
         if not 1 <= port <= 65535:

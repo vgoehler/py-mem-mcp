@@ -21,6 +21,6 @@ COPY src ./src
 RUN addgroup --system app && adduser --system --ingroup app app
 USER app
 
-EXPOSE 8000
+EXPOSE 3000
 
 ENTRYPOINT ["python", "-m", "py_mem_mcp.server"]
