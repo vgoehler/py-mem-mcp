@@ -9,9 +9,13 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Load .env from the project root (three levels up from this file)
-_env_path = Path(__file__).parent.parent.parent.parent / ".env"
+print("config")
+# Load .env from the project root -- if executed should be pwd
+_env_path = Path.cwd() / ".env"
+if not _env_path.exists():
+    raise FileNotFoundError(f"Missing .env file: {_env_path}")
 load_dotenv(_env_path)
+print(os.environ)
 
 
 def require_env(name: str) -> str:
