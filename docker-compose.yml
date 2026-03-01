@@ -6,7 +6,15 @@ services:
     image: py-mem-mcp:latest
     container_name: py-mem-mcp
     env_file:
-      - .env
+      - .env  # I need the file, as app checks for it
+    volumes:
+      - ./.env:/app/.env:ro
     ports:
       - "3000:3000"
     restart: unless-stopped
+    networks:
+      - n8n_n8n_network
+
+networks:
+  n8n_n8n_network:
+    external: true
