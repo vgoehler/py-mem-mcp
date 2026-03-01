@@ -16,6 +16,7 @@ from .tools.lehrplan import LehrplanTools
 from .tools.listing import ListingTools
 from .tools.query import QueryTools
 from .tools.search import SearchTools
+from .config import init_env_vars, require_env
 
 
 def create_server() -> FastMCP:
@@ -25,10 +26,7 @@ def create_server() -> FastMCP:
     then registers all MCP tools.
     """
     graph_registry = GraphRegistry()
-    sparql_endpoint = os.environ.get("SPARQL_ENDPOINT", "")
-    if not sparql_endpoint:
-        from .config import require_env
-        sparql_endpoint = require_env("SPARQL_ENDPOINT")
+    sparql_endpoint = require_env("SPARQL_ENDPOINT")
 
     sparql_client = SparqlClient(sparql_endpoint)
     bundesland_registry = BundeslandRegistry()
@@ -60,14 +58,10 @@ def check_port():
 
 def main() -> None:
     """Entry point for the MEM ontology MCP server."""
+    init_env_vars()
     port = check_port()
 
     mcp = create_server()
-
-    sparql_endpoint = os.environ.get("SPARQL_ENDPOINT", "(not set)")
-    print(f"MEM Ontology MCP Server starting on port {port}", file=sys.stderr)
-    print(f"SPARQL endpoint: {sparql_endpoint}", file=sys.stderr)
-
     mcp.run(transport="streamable-http", host="0.0.0.0", port=port)
 
 
