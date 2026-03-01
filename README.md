@@ -4,6 +4,8 @@ A Python implementation of the MEM (Metadata for Education Media) ontology MCP s
 built with [FastMCP](https://github.com/jlowin/fastmcp) and managed with
 [Poetry](https://python-poetry.org/).
 
+This is a reimplementation of [MEM-MCP](https://github.com/FWU-DE/mem-mcp) in Python.
+
 ## Features
 
 The server exposes the following MCP tools:
@@ -63,9 +65,11 @@ All configuration is via environment variables (loaded from `.env`).
 | `GRAPH_SCHULART` | Schulart graph URI | ✔ |
 | `GRAPH_SCHULFACH` | Schulfach graph URI | ✔ |
 | `GRAPH_STATE_<CODE>` | Graph URI for a state (e.g. `GRAPH_STATE_SN`) | optional |
-| `PORT` | HTTP port (default: `8000`) | optional |
+| `PORT` | HTTP port (default: `3000`) | optional |
 
 ## Running the server
+
+Run the server directly via Poetry. Make sure to set the required environment variables in `.env` before starting.
 
 ```bash
 # Development
@@ -77,12 +81,15 @@ poetry run python -m py_mem_mcp.server
 
 ## Running with Docker
 
+A Dockerfile and docker-compose.yml is provided to run the server in a container. Make sure to set the required environment variables in `.env` before building.
+You should also set the docker compose network as needed. I modified it to work with my n8n instance, but you can adjust it to your needs.
+
 ```bash
 cp .env.example .env   # edit as needed
-docker compose up -d
+docker compose up -d --build
 ```
 
-The server will be available at `http://localhost:8000/mcp`.
+The server will be available at `http://localhost:3000/mcp`.
 
 ### MCP client configuration
 
@@ -91,7 +98,7 @@ The server will be available at `http://localhost:8000/mcp`.
   "mcpServers": {
     "mem-ontology": {
       "type": "http",
-      "url": "http://localhost:8000/mcp"
+      "url": "http://localhost:3000/mcp"
     }
   }
 }
