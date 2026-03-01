@@ -43,8 +43,7 @@ def create_server() -> FastMCP:
     return mcp
 
 
-def main() -> None:
-    """Entry point for the MEM ontology MCP server."""
+def check_port():
     port_str = os.environ.get("PORT", "3000")
     try:
         port = int(port_str)
@@ -56,6 +55,12 @@ def main() -> None:
             file=sys.stderr,
         )
         sys.exit(1)
+    return port
+
+
+def main() -> None:
+    """Entry point for the MEM ontology MCP server."""
+    port = check_port()
 
     mcp = create_server()
 
